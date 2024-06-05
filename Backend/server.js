@@ -5,10 +5,12 @@ const dotenv = require('dotenv').config()
 const app = express();
 const PORT = 4000;
 const jwt = require('jsonwebtoken')
+const { createError } = require('./utils');
 
 const userRouter = require('./routes/user');
 const pizzaRouter = require('./routes/pizza');
-const { createError } = require('./utils');
+const orderRouter = require('./routes/order');
+
 
 
 
@@ -25,7 +27,8 @@ app.use((req, res , next)=>{
     else
     {
         const token = req.headers['token'];
-        if(token){
+        console.log(token)
+        if(!token){
             res.send(createError({
                 'Error' : "Token Missing" 
             }))
@@ -45,8 +48,9 @@ app.use((req, res , next)=>{
     }
 })
 
-app.use('/user', userRouter)
+app.use('/user', userRouter);
 app.use('/pizza', pizzaRouter);
+app.use('/order', orderRouter);
 
 
 app.listen(PORT, ()=>{

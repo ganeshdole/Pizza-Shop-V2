@@ -69,4 +69,4 @@ CREATE TABLE orderDetail (
     FOREIGN KEY (pizzaId) REFERENCES pizza(id)
 );
 
--- We are going with role, user, address, pizza, orderMaster, orderDetail, payment 
+-- We are going with role, user, address, pizza, orderMaster, orderDetail, payment
