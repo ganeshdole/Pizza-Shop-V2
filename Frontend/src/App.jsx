@@ -1,12 +1,12 @@
-import { Routes, Route, Link } from "react-router-dom"
+import MainRoutes from "./components/routes"
+import { ToastContainer } from "react-toastify"
 function App() {
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
-    </div>
+    <>
+      <MainRoutes />
+      <ToastContainer />
+    </>
   )
 }
 
