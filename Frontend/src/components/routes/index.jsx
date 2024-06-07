@@ -4,26 +4,25 @@ import PrivateRoutes from './privateRoutes';
 import Register from '../../pages/Register';
 import Home from "../../pages/Home";
 import Order from "../../pages/Order";
+import Layout from '../layout/MainLayout';
+import Cart from '../../pages/Cart'
 
 const MainRoutes = () => {
     const routes = useRoutes([
         {
+            path: '/',
             element: <PrivateRoutes />,
             children: [
                 {
                     path: '/',
-                    element: <Home />
-
-                }, {
-                    path: '/cart',
-                    element: <cart />
-                },
-                {
-                    element: <Order />,
-                    path: "/order"
+                    element: <Layout />,
+                    children: [
+                        { path: '/', element: <Home /> },
+                        { path: 'order', element: <Order /> },
+                        { path: 'cart', element: <Cart /> }
+                    ]
                 }
             ]
-
         },
         {
             element: <Login />,
