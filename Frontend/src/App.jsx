@@ -1,8 +1,12 @@
-
+import { Routes, Route, Link } from "react-router-dom"
 function App() {
 
   return (
-    <div></div>
+    <div>
+      <h1 className="text-3xl font-bold underline">
+        Hello world!
+      </h1>
+    </div>
   )
 }
 
