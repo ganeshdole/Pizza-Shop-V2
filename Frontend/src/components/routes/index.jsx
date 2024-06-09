@@ -26,7 +26,7 @@ const MainRoutes = () => {
         },
         {
             element: <Login />,
-            path: "/login",
+            path: "/signin",
         },
         {
             element: <Register />,
