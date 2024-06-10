@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', async (req, res)=>{
     try{
-        const statement = 'select id, name, price,details, image from pizza'
+        const statement = 'select id, name, price,details,type, image from pizza'
         const [result] = await db.execute(statement);
         res.send(utils.createResult(result));
     }catch(error){  

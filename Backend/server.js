@@ -17,6 +17,7 @@ const orderRouter = require('./routes/order');
 app.use(cors());
 app.use(express.json());
 app.use(morgan('combined'));
+app.use(express.static('images'))
 
 app.use((req, res , next)=>{
     const skip_url = ["/user/signin","/user/signup", "/pizza"];

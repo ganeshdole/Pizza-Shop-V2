@@ -6,6 +6,7 @@ import Home from "../../pages/Home";
 import Order from "../../pages/Order";
 import Layout from '../layout/MainLayout';
 import Cart from '../../pages/Cart'
+import Menu from '../../pages/Menu';
 
 const MainRoutes = () => {
     const routes = useRoutes([
@@ -19,7 +20,8 @@ const MainRoutes = () => {
                     children: [
                         { path: '/', element: <Home /> },
                         { path: 'order', element: <Order /> },
-                        { path: 'cart', element: <Cart /> }
+                        { path: 'cart', element: <Cart /> },
+                        { path: 'menu', element: <Menu /> }
                     ]
                 }
             ]
