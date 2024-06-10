@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoIosArrowRoundBack } from "react-icons/io";
-
+import { signUpUser } from '../services/user';
+import { toast } from "react-toastify";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -20,10 +21,27 @@ const Register = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Add form validation and submission logic here
-        console.log('Form submitted', formData);
+        const result = await signUpUser(formData);
+        if (formData.firstName.length === 0) {
+            toast.error("Enter First Name");
+        } else if (formData.lastName.length === 0) {
+            toast.error("Enter Last name");
+        } else if (formData.email.length === 0) {
+            toast.error("Enter email");
+        } else if (formData.password.length === 0) {
+            toast.error("Enter password");
+        } else if (formData.password !== formData.confirmPassword) {
+            toast.error("Passwords do not match");
+        } else {
+            if (result.status === "success") {
+                toast.success("Successfully registered");
+                navigate("/signin");
+            } else {
+                toast.error('Email Already Exist!');
+            }
+        }
     };
 
     return (
@@ -31,11 +49,9 @@ const Register = () => {
             <div className='bg-gray-100 p-4'>
                 <button className='flex  items-center ' onClick={() => {
                     navigate(-1);
-
                 }}>
                     <IoIosArrowRoundBack />
                     Back
-
                 </button>
             </div>
             <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
@@ -51,7 +67,7 @@ const Register = () => {
                                     value={formData.firstName}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded mt-1"
-                                    required
+
                                 />
                             </div>
                             <div>
@@ -62,7 +78,7 @@ const Register = () => {
                                     value={formData.lastName}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded mt-1"
-                                    required
+
                                 />
                             </div>
                         </div>
@@ -74,7 +90,7 @@ const Register = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                                required
+
                             />
                         </div>
                         <div>
@@ -85,7 +101,7 @@ const Register = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                                required
+
                             />
                         </div>
                         <div>
@@ -96,7 +112,7 @@ const Register = () => {
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                                required
+
                             />
                         </div>
                         <button

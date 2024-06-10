@@ -9,8 +9,12 @@ import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { SERVER_URL } from '../../services/utils';
+import { addToCart } from "../../features/cartSlice";
+import { useDispatch } from "react-redux";
+
 
 const PizzaCard = ({ pizza }) => {
+    const dispatch = useDispatch();
     const { name, details, image, price, type } = pizza;
     return (
         <Card sx={{ width: 320, maxWidth: "100%", boxShadow: "lg" }}>
@@ -55,6 +59,9 @@ const PizzaCard = ({ pizza }) => {
                     variant="solid"
                     color="danger"
                     size="lg"
+                    onClick={() => {
+                        dispatch(addToCart({ ...pizza, quantity: 1 }))
+                    }}
                 >
                     Add to Cart
                 </Button>
