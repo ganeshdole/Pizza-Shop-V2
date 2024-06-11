@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowRoundBack } from "react-icons/io";
 
+
 const Cart = () => {
     const cart = useSelector((state) => state.cart);
+    const { token } = useSelector((state) => state.authentication);
     const navigate = useNavigate();
     const [bill, setBill] = useState(0);
     useEffect(() => {
@@ -16,6 +18,11 @@ const Cart = () => {
         }
         console.log("Total Amount:",);
     }, [cart.items]);
+
+    if (!token) {
+        navigate("/signin")
+    }
+
     return (
         <>
             <div className="pl-2 pt-2">

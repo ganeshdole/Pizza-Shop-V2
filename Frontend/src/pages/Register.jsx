@@ -21,20 +21,27 @@ const Register = () => {
         });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const result = await signUpUser(formData);
+    function validInput() {
+        console.log('Hello')
         if (formData.firstName.length === 0) {
             toast.error("Enter First Name");
         } else if (formData.lastName.length === 0) {
-            toast.error("Enter Last name");
+            toast.error("Enter Last Name");
         } else if (formData.email.length === 0) {
-            toast.error("Enter email");
+            toast.error("Enter Email");
         } else if (formData.password.length === 0) {
-            toast.error("Enter password");
+            toast.error("Enter Password");
         } else if (formData.password !== formData.confirmPassword) {
             toast.error("Passwords do not match");
         } else {
+            return true;
+        }
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (validInput()) {
+            const result = await signUpUser(formData);
             if (result.status === "success") {
                 toast.success("Successfully registered");
                 navigate("/signin");
@@ -67,7 +74,11 @@ const Register = () => {
                                     value={formData.firstName}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded mt-1"
-
+                                    onBlur={(e) => {
+                                        if (e.target.value.length === 0) {
+                                            toast.error('Enter First Name')
+                                        }
+                                    }}
                                 />
                             </div>
                             <div>
@@ -78,7 +89,11 @@ const Register = () => {
                                     value={formData.lastName}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded mt-1"
-
+                                    onBlur={(e) => {
+                                        if (e.target.value.length === 0) {
+                                            toast.error('Enter Last name')
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>
@@ -90,7 +105,11 @@ const Register = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 className="w-full p-2 border border-gray-300 rounded mt-1"
-
+                                onBlur={(e) => {
+                                    if (e.target.value.length === 0) {
+                                        toast.error('Enter Email')
+                                    }
+                                }}
                             />
                         </div>
                         <div>
@@ -101,7 +120,11 @@ const Register = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 className="w-full p-2 border border-gray-300 rounded mt-1"
-
+                                onBlur={(e) => {
+                                    if (e.target.value.length === 0) {
+                                        toast.error('Enter Password')
+                                    }
+                                }}
                             />
                         </div>
                         <div>
@@ -112,7 +135,11 @@ const Register = () => {
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                                 className="w-full p-2 border border-gray-300 rounded mt-1"
-
+                                onBlur={(e) => {
+                                    if (e.target.value.length === 0) {
+                                        toast.error('Enter Password')
+                                    }
+                                }}
                             />
                         </div>
                         <button

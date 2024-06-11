@@ -1,9 +1,20 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { toast } from 'react-toastify';
+import { singInUser } from '../services/user'
+import { useDispatch, useSelector } from 'react-redux';
+import { addToken } from '../features/authSlice';
+import { useLocation } from 'react-router-dom';
+
+
 
 const Login = () => {
+
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -16,17 +27,22 @@ const Login = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted', formData);
+        try {
+            const result = await singInUser(formData);
+            dispatch(addToken(result.data.token))
+            navigate("/")
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
         <>
             <div className='bg-gray-100 p-4 '>
                 <button className='flex  items-center' onClick={() => {
-                    navigate(-1);
-
+                    navigate(-1)
                 }}>
                     <IoIosArrowRoundBack />
                     Back
@@ -45,6 +61,11 @@ const Login = () => {
                                 onChange={handleChange}
                                 className="w-full p-2 border border-gray-300 rounded mt-1"
                                 required
+                                onBlur={(e) => {
+                                    if (e.target.value.length === 0) {
+                                        toast.error('Enter Email')
+                                    }
+                                }}
                             />
                         </div>
                         <div>
@@ -56,6 +77,11 @@ const Login = () => {
                                 onChange={handleChange}
                                 className="w-full p-2 border border-gray-300 rounded mt-1"
                                 required
+                                onBlur={(e) => {
+                                    if (e.target.value.length === 0) {
+                                        toast.error('Enter Password')
+                                    }
+                                }}
                             />
                         </div>
                         <button

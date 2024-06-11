@@ -1,10 +1,14 @@
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleMenu } from '../features/MenuSlice';
+import { removeToken } from "../features/authSlice";
+
 
 const Navbar = () => {
     const dispatch = useDispatch();
     const { isOpen } = useSelector((state) => state.menu);
+    const { token } = useSelector((state) => state.authentication);
+    const { items } = useSelector((state) => state.cart)
 
     return (
         <nav className="bg-white shadow-md">
@@ -21,20 +25,42 @@ const Navbar = () => {
                                 to="/cart"
                                 className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                             >
-                                Cart
+                                {token ? `Cart (${items.length})` : 'Cart'}
                             </NavLink>
-                            <NavLink
-                                to="/signup"
-                                className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                            >
-                                Sign Up
-                            </NavLink>
-                            <NavLink
-                                to="/signin"
-                                className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                            >
-                                Sign In
-                            </NavLink>
+                            {!token && (
+                                <>
+                                    <NavLink
+                                        to="/signup"
+                                        className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                    >
+                                        Sign Up
+                                    </NavLink>
+                                    <NavLink
+                                        to="/signin"
+                                        className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                    >
+                                        Sign In
+                                    </NavLink>
+                                </>
+                            )}
+                            {token && (
+                                <>
+                                    <NavLink
+                                        to="/order"
+                                        className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                    >
+                                        My  Order
+                                    </NavLink>
+                                    <button
+                                        className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                        onClick={() => {
+                                            dispatch(removeToken());
+                                        }}
+                                    >
+                                        Log Out
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="md:hidden flex items-center">
@@ -102,22 +128,46 @@ const Navbar = () => {
                                     className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition-all duration-300 ease-in-out"
                                     onClick={() => dispatch(toggleMenu())}
                                 >
-                                    Cart
+                                    {token ? `Cart (${items.length})` : 'Cart'}
                                 </NavLink>
-                                <NavLink
-                                    to="/signup"
-                                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition-all duration-300 ease-in-out"
-                                    onClick={() => dispatch(toggleMenu())}
-                                >
-                                    Sign Up
-                                </NavLink>
-                                <NavLink
-                                    to="/signin"
-                                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition-all duration-300 ease-in-out"
-                                    onClick={() => dispatch(toggleMenu())}
-                                >
-                                    Sign In
-                                </NavLink>
+                                {!token && (
+                                    <>
+                                        <NavLink
+                                            to="/signup"
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition-all duration-300 ease-in-out"
+                                            onClick={() => dispatch(toggleMenu())}
+                                        >
+                                            Sign Up
+                                        </NavLink>
+                                        <NavLink
+                                            to="/signin"
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition-all duration-300 ease-in-out"
+                                            onClick={() => dispatch(toggleMenu())}
+                                        >
+                                            Sign In
+                                        </NavLink>
+                                    </>
+                                )}
+                                {token && (
+                                    <>
+                                        <NavLink
+                                            to="/order"
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition-all duration-300 ease-in-out"
+
+                                        >
+                                            My Order
+                                        </NavLink>
+                                        <NavLink
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition-all duration-300 ease-in-out"
+                                            onClick={() => {
+                                                dispatch(removeToken());
+                                                dispatch(toggleMenu());
+                                            }}
+                                        >
+                                            Log Out
+                                        </NavLink>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
