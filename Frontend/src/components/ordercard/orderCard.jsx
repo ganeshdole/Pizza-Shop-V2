@@ -41,7 +41,6 @@ const OrderCard = (props) => {
 
     return (
         <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-semibold mb-4">Order</h2>
             {order && order.length > 0 ? (
                 <div>
                     <div className="grid grid-cols-1 gap-4 mb-4 text-gray-600 font-semibold">
@@ -67,6 +66,11 @@ const OrderCard = (props) => {
                             </div>
                             <div>RS {detail.totalAmount}</div>
                             <div>{detail.quantity}</div>
+                            <div>
+                                <button className="font-light text-gray-500">
+                                    Cancel Order
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>

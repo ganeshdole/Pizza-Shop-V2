@@ -24,9 +24,24 @@ const Cart = () => {
     }, [cart.items]);
 
     if (!token) {
-        return <div className="container mx-auto p-4">
-            <p className="text-center text-red-500">Please sign in to view your Cart.</p>
-        </div>
+
+        return <> <div className="pl-2 pt-2">
+            <button
+                className="flex items-center"
+                onClick={() => {
+                    navigate(-1);
+                }}
+            >
+                <IoIosArrowRoundBack />
+                Back
+            </button>
+        </div >
+            <div className="container mx-auto p-4">
+
+                <p className="text-center text-red-500">Please sign in to view your Cart.</p>
+            </div>
+
+        </>
     }
     const checkOut = async (bill, items) => {
         const result = await postOrder({ bill, items, token })

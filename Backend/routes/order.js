@@ -48,20 +48,19 @@ router.get('/details/:id', async (req, res) => {
 
 
 router.post("/", async (req, res) => {
-    const connection = await db.getConnection();
+
     try {
-        await connection.beginTransaction();
         const {id} = req.data;
         const { addressId ,totalAmount, items } = req.body;
         console.log(addressId ,totalAmount, items)
         const orderMasterStatement = `INSERT INTO orderMaster(userId, addressId, totalAmount) VALUES (?, ?, ?)`;
-        const [orderMasterResult] = await connection.execute(orderMasterStatement, [id, addressId, totalAmount]);
+        const [orderMasterResult] = await db.execute(orderMasterStatement, [id, addressId, totalAmount]);
         
         const orderId = orderMasterResult.insertId;
 
         for (let item of items) {
             const orderDetailStatement = `INSERT INTO orderDetail (orderId, pizzaId, quantity, totalAmount) VALUES (?, ?, ?, ?)`;
-            await connection.execute(orderDetailStatement, [orderId, item.id, item.quantity, item.quantity * item.price]);
+            await db.execute(orderDetailStatement, [orderId, item.id, item.quantity, item.quantity * item.price]);
         }
 
         await connection.commit();

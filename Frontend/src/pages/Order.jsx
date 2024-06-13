@@ -42,6 +42,7 @@ const Order = () => {
                     <p className="text-center text-red-500">{error}</p>
                 ) : orders.length > 0 ? (
                     <div className="grid gap-4">
+                        <h2 className="text-2xl font-semibold mb-4">Order</h2>
                         {orders.map(order => (
                             <div key={order.id} className="mb-4">
                                 <OrderCard order={order} />
