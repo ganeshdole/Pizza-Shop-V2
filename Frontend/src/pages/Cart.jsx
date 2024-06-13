@@ -3,24 +3,41 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowRoundBack } from "react-icons/io";
-
+import { useDispatch } from "react-redux";
+import { removeFromCart, addQuantity, removeQuantity, clearCart } from "../features/cartSlice";
+import { postOrder } from "../services/order";
+import { toast } from "react-toastify";
 
 const Cart = () => {
     const cart = useSelector((state) => state.cart);
+    const dispatch = useDispatch();
     const { token } = useSelector((state) => state.authentication);
     const navigate = useNavigate();
     const [bill, setBill] = useState(0);
+
     useEffect(() => {
         let totalAmount = 0;
         for (const item of cart.items) {
             totalAmount += parseFloat(item["price"]) * item["quantity"];
             setBill(totalAmount)
         }
-        console.log("Total Amount:",);
     }, [cart.items]);
 
     if (!token) {
-        navigate("/signin")
+        return <div className="container mx-auto p-4">
+            <p className="text-center text-red-500">Please sign in to view your Cart.</p>
+        </div>
+    }
+    const checkOut = async (bill, items) => {
+        const result = await postOrder({ bill, items, token })
+        if (result.status = "success") {
+            dispatch(clearCart());
+            toast.success("Order Placed Successfully")
+            navigate("/order")
+        } else {
+            toast.error("Something went wrong! Try Again", result.error);
+        }
+
     }
 
     return (
@@ -66,6 +83,7 @@ const Cart = () => {
                                 <th className="py-2 px-4 border border-gray-400">Price</th>
                                 <th className="py-2 px-4 border border-gray-400">Quantity</th>
                                 <th className="py-2 px-4 border border-gray-400">Total Amount</th>
+                                <th className="py-2 px-4 border border-gray-400">Action</th>
                             </tr>
                         </thead>
                         <tbody className="text-center">
@@ -81,26 +99,39 @@ const Cart = () => {
                                     <td className="py-2 px-4 border border-gray-300">
                                         {item["price"]}
                                     </td>
-                                    <td className="py-2 px-4 border border-gray-300">
+                                    <td className=" flex justify-evenly py-4 px-4 border border-gray-300 items-center">
+                                        <button className="border-2 p-1" onClick={() => dispatch(addQuantity(item))}> + </button>
                                         {item["quantity"]}
+                                        <button className="border-2 p-1" onClick={() => dispatch(removeQuantity(item))}> - </button>
                                     </td>
                                     <td className="py-2 px-4 border border-gray-300">
                                         {(
                                             item["quantity"] * parseFloat(item["price"])
                                         ).toFixed(2)}
                                     </td>
+                                    <td className="py-2 px-4 border border-gray-300">
+                                        <button className="text-blue-700 hover:underline" onClick={() => {
+                                            console.log("removeFromCart")
+                                            dispatch(removeFromCart(item))
+                                        }}>Remove</button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                         <tfoot className="text-center">
-                            <td></td> <td></td> <td></td> <td></td>
-                            <td className="py-2 px-4 border border-gray-300">
-                                Total Bill : {bill}
-                            </td>
+                            <tr
+                                className="bg-white hover:bg-gray-100 transition-colors duration-200"
+                            >
+                                <td className="py-2 px-4 border border-gray-300" colSpan={5}>
+                                    Total Bill : {bill}
+                                </td>
+                            </tr>
                         </tfoot>
                     </table>
                     <div className="flex mt-4 justify-center ">
-                        <button type="button" className="bg-green-500 p-2 rounded-lg font-semibold font-sans">
+                        <button type="button" className="bg-green-500 p-2 rounded-lg font-semibold font-sans" onClick={() => {
+                            checkOut(bill, cart.items)
+                        }}>
                             Check Out
                         </button>
                     </div>

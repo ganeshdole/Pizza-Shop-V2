@@ -28,7 +28,6 @@ app.use((req, res , next)=>{
     else
     {
         const token = req.headers['token'];
-        console.log(token)
         if(!token){
             res.send(createError({
                 'Error' : "Token Missing" 

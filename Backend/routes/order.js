@@ -16,32 +16,52 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get('/details/:id', async( req, res) => {
-    try{
-        const {id} = req.params;
-        const statement = 'select pizzaId,  quantity, totalAmount, created_at from orderdetail where orderId = ?';
-        const [result] = await db.execute(statement, [id]);
-        res.send(createSuccess(result));
+router.get('/details/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const statement = 'SELECT pizzaId, quantity, totalAmount, created_at FROM orderdetail WHERE orderId = ?';
+        const [orderDetails] = await db.execute(statement, [id]);
+        
+        if (orderDetails.length === 0) {
+            return res.send(createError('No order details found'));
+        }
+        
+        const pizzaIds = orderDetails.map(pizza => pizza.pizzaId);
+        const getPizza = `SELECT id, name, details, image, price FROM pizza WHERE id IN (${pizzaIds.map(() => '?').join(', ')})`;
+        const [pizzas] = await db.execute(getPizza, pizzaIds);
+        
+        const pizzasMap = pizzas.reduce((map, pizza) => {
+            map[pizza.id] = pizza;
+            return map;
+        }, {});
+
+        const detailedOrder = orderDetails.map(detail => ({
+            ...detail,
+            pizza: pizzasMap[detail.pizzaId]
+        }));
+
+        res.send(createSuccess(detailedOrder));
+    } catch (error) {
+        res.send(createError(error.message || error));
     }
-    catch(error)
-    {
-        res.send(createError(error));
-    }
-})
+});
+
 
 router.post("/", async (req, res) => {
     const connection = await db.getConnection();
     try {
         await connection.beginTransaction();
-
-        const { userId, addressId, totalAmount, items } = req.body;
+        const {id} = req.data;
+        const { addressId ,totalAmount, items } = req.body;
+        console.log(addressId ,totalAmount, items)
         const orderMasterStatement = `INSERT INTO orderMaster(userId, addressId, totalAmount) VALUES (?, ?, ?)`;
-        const [orderMasterResult] = await connection.execute(orderMasterStatement, [userId, addressId, totalAmount]);
+        const [orderMasterResult] = await connection.execute(orderMasterStatement, [id, addressId, totalAmount]);
+        
         const orderId = orderMasterResult.insertId;
 
         for (let item of items) {
             const orderDetailStatement = `INSERT INTO orderDetail (orderId, pizzaId, quantity, totalAmount) VALUES (?, ?, ?, ?)`;
-            await connection.execute(orderDetailStatement, [orderId, item.id, item.quantity, item.totalAmount]);
+            await connection.execute(orderDetailStatement, [orderId, item.id, item.quantity, item.quantity * item.price]);
         }
 
         await connection.commit();
@@ -49,9 +69,6 @@ router.post("/", async (req, res) => {
     } catch (error) {
         await connection.rollback();
         console.log(error);
-        res.status(500).send(createError(error.message));
-    } finally {
-        connection.release();
     }
 });
 
