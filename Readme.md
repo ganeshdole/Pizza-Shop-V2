@@ -92,7 +92,11 @@ Welcome to Pizza Shop V2! This project is a full-stack web application for a piz
 
 ## Images
 
-![alt text](Project%20Images%20/HomePage.png)
+![Home Page](Project%20Images%20/HomePage.png)
+![Menu Page](Project%20Images%20/MenuPage.png)
+![Cart Page](Project%20Images%20/Cart.png)
+![Cart Page Without Login](Project%20Images%20/CartWithOutLogin.png)
+![Order Page](Project%20Images%20/Order.png)
 
 ## Project Structure
 
