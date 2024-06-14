@@ -1,6 +1,3 @@
-Sure! Below is a README template tailored for your full-stack project (both frontend and backend) hosted on GitHub at `https://github.com/ganeshdole/Pizza-Shop-V2`.
-
-````markdown
 # Pizza Shop V2
 
 Welcome to Pizza Shop V2! This project is a full-stack web application for a pizza restaurant, featuring a frontend built with React and a backend built with Node.js and Express.
@@ -126,6 +123,7 @@ Pizza-Shop-V2/
 ├── README.md
 └── tailwind.config.js
 ```
+
 ````
 
 ## Components
@@ -189,3 +187,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ### Notes:
 Feel free to customize and expand this Prject based on the specifics and additional details.
 ```
+````
