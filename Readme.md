@@ -44,8 +44,6 @@ Welcome to Pizza Shop V2! This project is a full-stack web application for a piz
 
 - **Node.js**: JavaScript runtime.
 - **Express**: Web framework for Node.js.
-- **MongoDB**: NoSQL database.
-- **Mongoose**: ODM library for MongoDB and Node.js.
 
 <!-- ## Getting Started
 
