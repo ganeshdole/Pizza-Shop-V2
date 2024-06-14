@@ -89,6 +89,7 @@ Welcome to Pizza Shop V2! This project is a full-stack web application for a piz
    ```
 
 3. Open your browser and go to `http://localhost:3000`. -->
+## Images 
 
 ## Project Structure
 
