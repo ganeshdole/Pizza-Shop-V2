@@ -62,8 +62,6 @@ router.post("/", async (req, res) => {
             const orderDetailStatement = `INSERT INTO orderDetail (orderId, pizzaId, quantity, totalAmount) VALUES (?, ?, ?, ?)`;
             await db.execute(orderDetailStatement, [orderId, item.id, item.quantity, item.quantity * item.price]);
         }
-
-        await connection.commit();
         res.send(createSuccess({ message: 'Order Placed Successfully', orderId }));
     } catch (error) {
         await connection.rollback();

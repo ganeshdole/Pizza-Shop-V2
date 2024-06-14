@@ -66,13 +66,13 @@ const OrderCard = (props) => {
                             </div>
                             <div>RS {detail.totalAmount}</div>
                             <div>{detail.quantity}</div>
-                            <div>
-                                <button className="font-light text-gray-500">
-                                    Cancel Order
-                                </button>
-                            </div>
                         </div>
                     ))}
+                    <div>
+                        <button className="font-light text-gray-500">
+                            Cancel Order
+                        </button>
+                    </div>
                 </div>
             ) : (
                 <p className="text-center text-gray-600">
